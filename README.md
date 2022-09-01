@@ -170,7 +170,7 @@ Options:
         -rna    The FASTA is RNA not DNA. Reverse complementation handled accordingly.
 ```
 ## 在提取基因间区序列过程中出现如下问题
-···
+```
 WARNING. chromosome (chr10_GL383545v1_alt) was not found in the FASTA file. Skipping.
 WARNING. chromosome (chr10_GL383546v1_alt) was not found in the FASTA file. Skipping.
 WARNING. chromosome (chr10_KI270824v1_alt) was not found in the FASTA file. Skipping.
