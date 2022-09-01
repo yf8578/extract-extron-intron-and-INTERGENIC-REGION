@@ -7,35 +7,35 @@ DaveTang的这篇博客更新于2014年，那时转录组测序很火热。RNA-S
 ## 首先下载参考基因组注释
 ```
 #hg38版本
-wget -c ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_33/gencode.v33.annotation.gtf.gz
+wget -c ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_41/gencode.v41.annotation.gtf.gz
 
-zcat gencode.v33.annotation.gtf.gz | head -n6 
-##description: evidence-based annotation of the human genome (GRCh38), version 33 (Ensembl 99)
+zcat gencode.v41.annotation.gtf.gz | head -n6 
+##description: evidence-based annotation of the human genome (GRCh38), version 41 (Ensembl 107)
 ##provider: GENCODE
 ##contact: gencode-help@ebi.ac.uk
 ##format: gtf
-##date: 2019-12-13
-chr1	HAVANA	gene	11869	14409	.	+	.	gene_id "ENSG00000223972.5"; gene_type "transcribed_unprocessed_pseudogene"; gene_name "DDX11L1"; level 2; hgnc_id "HGNC:37102"; havana_gene "OTTHUMG00000000961.2";
+##date: 2022-05-12
+chr1    HAVANA  gene    11869   14409   .       +       .       gene_id "ENSG00000223972.5"; gene_type "transcribed_unprocessed_pseudogene"; gene_name "DDX11L1"; level 2; hgnc_id "HGNC:37102"; havana_gene "OTTHUMG00000000961.2";
 ```
 其中的第三列说明了feature的类型，其中会有exon、CDS、UTR等等
 ```
-zcat gencode.v33.annotation.gtf.gz| grep -v "^#" | cut -f3 | sort | uniq -c | sort -k1rn
-1377112 exon
- 763824 CDS
- 311868 UTR
- 227912 transcript
-  87848 start_codon
-  80187 stop_codon
-  60662 gene
+zcat gencode.v44.annotation.gtf.gz| grep -v "^#" | cut -f3 | sort | uniq -c | sort -k1rn
+1625321 exon
+ 871490 CDS
+ 377983 UTR
+ 251236 transcript
+  97009 start_codon
+  90749 stop_codon
+  61852 gene
     119 Selenocysteine
 ```
 它们之间的关系，可以看看：http://blog.sciencenet.cn/blog-1271266-792469.html 以及 http://www.dxy.cn/bbs/topic/36728037
-**UTR（UntranslatedRegions)**即非翻译区，是信使RNA（mRNA）分子两端的非编码片段，UTR在DNA序列中算是外显子;5’-UTR从mRNA起点的甲基化鸟嘌呤核苷酸帽延伸至AUG起始密码子，3’-UTR从编码区末端的终止密码子延伸至多聚A尾巴（Poly-A）的末端；
+UTR（UntranslatedRegions)即非翻译区，是信使RNA（mRNA）分子两端的非编码片段，`UTR在DNA序列中算是外显子`;5’-UTR从mRNA起点的甲基化鸟嘌呤核苷酸帽延伸至AUG起始密码子，3’-UTR从编码区末端的终止密码子延伸至多聚A尾巴（Poly-A）的末端；
 基因间区是每个基因之间的间隔序列，不属于外显子也不属于内含子，它是non coding；
 ![image](https://user-images.githubusercontent.com/71922803/187847850-3b5d9a82-d988-49af-b303-775c5456a26d.png)
 >【图片中描述的过程：基因经过转录形成 pre-mRNA，这里面包含着内含子和外显子（5端是一个外显子，但是这段外显子不仅包含CDS，还包含5’ UTR；3端也是以外显子结束，但它也是不仅包含CDS，还包含3’ UTR），经过剪接形成成熟mRNA,内含子已减掉。如果抛开后来加上去的cap和poly A的话，这时全是外显子，但是不全是CDS，因为只有中间的那部分以起始密码子开始、以终止密码子结束的片段才是CDS，只有这部分才会被翻译成蛋白质】
 
->**转录本（transcript）**是基因通过转录形成的一种或多种可供编码蛋白质的成熟的mRNA。一个基因由于可变剪切现象，可能产生多个转录本。【基因转录的过程，首先是形成前体mRNA，通过剪切内含子连接外显子，5’端加帽及3’端加尾之后形成成熟的mRNA。可变剪切就是：在剪切的过程中可能会剪切掉外显子，也有可能保留部分内含子，因此会形成多种mRNA即多个转录本】，而我们平时研究某个基因的功能，实际是研究它的一个转录本编码的蛋白的功能。一般情况下它的不同的转录本分布在不同类型的细胞中，当然也有可能多种转录本同时存在于某一细胞中。
+> **转录本（transcript)**是基因通过转录形成的一种或多种可供编码蛋白质的成熟的mRNA。一个基因由于可变剪切现象，可能产生多个转录本。【基因转录的过程，首先是形成前体mRNA，通过剪切内含子连接外显子，5’端加帽及3’端加尾之后形成成熟的mRNA。可变剪切就是：在剪切的过程中可能会剪切掉外显子，也有可能保留部分内含子，因此会形成多种mRNA即多个转录本】，而我们平时研究某个基因的功能，实际是研究它的一个转录本编码的蛋白的功能。一般情况下它的不同的转录本分布在不同类型的细胞中，当然也有可能多种转录本同时存在于某一细胞中。
 >编码区（Coding region，CDS） 是mRNA序列中编码蛋白质的那部分序列
 ## 获得外显子、内含子以及基因间区
 ### 外显子的获得 => mergeBed
