@@ -139,3 +139,46 @@ chr1	53312	57597
 chr1	64116	65418
 ```
 **到此便成功提取基因组中的内含子、外显子以及基因区间**
+## 获得对应的.fa文件
+1.下载人类基因组序列
+2.使用bedtools
+```
+Tool:    bedtools getfasta (aka fastaFromBed)
+Version: v2.30.0
+Summary: Extract DNA sequences from a fasta file based on feature coordinates.
+
+Usage:   bedtools getfasta [OPTIONS] -fi <fasta> -bed <bed/gff/vcf>
+
+Options:
+        -fi             Input FASTA file
+        -fo             Output file (opt., default is STDOUT
+        -bed            BED/GFF/VCF file of ranges to extract from -fi
+        -name           Use the name field and coordinates for the FASTA header
+        -name+          (deprecated) Use the name field and coordinates for the FASTA header
+        -nameOnly       Use the name field for the FASTA header
+        -split          Given BED12 fmt., extract and concatenate the sequences
+                        from the BED "blocks" (e.g., exons)
+        -tab            Write output in TAB delimited format.
+        -bedOut         Report extract sequences in a tab-delimited BED format instead of in FASTA format.
+                        - Default is FASTA format.
+        -s              Force strandedness. If the feature occupies the antisense,
+                        strand, the sequence will be reverse complemented.
+                        - By default, strand information is ignored.
+        -fullHeader     Use full fasta header.
+                        - By default, only the word before the first space or tab
+                        is used.
+        -rna    The FASTA is RNA not DNA. Reverse complementation handled accordingly.
+```
+## 在提取基因间区序列过程中出现如下问题
+···
+WARNING. chromosome (chr10_GL383545v1_alt) was not found in the FASTA file. Skipping.
+WARNING. chromosome (chr10_GL383546v1_alt) was not found in the FASTA file. Skipping.
+WARNING. chromosome (chr10_KI270824v1_alt) was not found in the FASTA file. Skipping.
+WARNING. chromosome (chr10_KI270825v1_alt) was not found in the FASTA file. Skipping.
+WARNING. chromosome (chr10_KN196480v1_fix) was not found in the FASTA file. Skipping.
+WARNING. chromosome (chr10_KN538365v1_fix) was not found in the FASTA file. Skipping.
+WARNING. chromosome (chr10_KN538366v1_fix) was not found in the FASTA file. Skipping.
+...
+```
+![image](https://user-images.githubusercontent.com/71922803/187893910-7c99ba00-0068-4888-a856-9f3e309707b2.png)
+基因碎片不碍事...吧？
