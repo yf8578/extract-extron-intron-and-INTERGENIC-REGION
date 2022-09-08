@@ -7,7 +7,7 @@ DaveTang的这篇博客更新于2014年，那时转录组测序很火热。RNA-S
 ## 首先下载参考基因组注释
 ```
 #hg38版本
-wget -c ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_41/gencode.v41.annotation.gtf.gz
+wget -c ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_41/gencode.v41.annotation..gz
 
 zcat gencode.v41.annotation.gtf.gz | head -n6 
 ##description: evidence-based annotation of the human genome (GRCh38), version 41 (Ensembl 107)
@@ -53,7 +53,7 @@ chr1	12178	12227
 # 然后进行排序，接着进行merge
 zcat gencode.v33.annotation.gtf.gz | awk 'BEGIN{OFS="\t";} $3=="exon" {print $1,$4-1,$5}' | sortBed | mergeBed -i - | gzip >gencode.v33.exon.annotation.gtf.gz
 
-zcat gencode.v33.exon.annotation.gtf.gz | head -n5
+zcat gencode.v33.exon.annotation.bed.gz | head -n5
 chr1	11868	12227
 chr1	12612	12721
 chr1	12974	13052
@@ -66,9 +66,9 @@ chr1	15004	15038
 ![image](https://user-images.githubusercontent.com/71922803/187851318-9ffa4ff4-8fd2-4657-b0d1-84814248f42b.png)
 ```
 # 选择GTF中gene的feature，然后排除merged exon
-zcat gencode.v33.annotation.gtf.gz | awk 'BEGIN{OFS="\t";} $3=="gene" {print $1,$4-1,$5}' | sortBed | subtractBed -a stdin -b gencode.v33.exon.annotation.gtf.gz | gzip >gencode.v33.intron.annotation.gtf.gz
+zcat gencode.v33.annotation.gtf.gz | awk 'BEGIN{OFS="\t";} $3=="gene" {print $1,$4-1,$5}' | sortBed | subtractBed -a stdin -b gencode.v33.exon.annotation.bed.gz | gzip >gencode.v33.intron.annotation.bed.gz
 
-zcat gencode.v33.intron.annotation.gtf.gz | head -n5
+zcat gencode.v33.intron.annotation.bed.gz | head -n5
 # 结果可以和上面👆的exon结果对照
 chr1	12227	12612 
 chr1	12721	12974
@@ -85,7 +85,7 @@ mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A -e         "select chrom
 # 去掉hg38.genome第一行注释：chrom	size
  sed -i '1d' hg38.genome
 # 排除gene
-zcat gencode.v33.annotation.gtf.gz | awk 'BEGIN{OFS="\t";} $3=="gene" {print $1,$4-1,$5}' | sortBed | complementBed -i stdin -g hg38.genome | gzip >gencode.v33.intergenic.annotation.gtf.gz
+zcat gencode.v33.annotation.gtf.gz | awk 'BEGIN{OFS="\t";} $3=="gene" {print $1,$4-1,$5}' | sortBed | complementBed -i stdin -g hg38.genome | gzip >gencode.v33.intergenic.annotation.bed.gz
 ```
 **但这里报了个错：Error: Sorted input specified, but the file stdin has the following record with a different sort order than the genomeFile hg38.genome**
 **实际上问题就是因为我们的sort bed后的chrxx不是按照数字排序的（http://asearchforsolutions.blogspot.com/2018/11/error-sorted-input-specified-but-file.html**
@@ -129,9 +129,9 @@ chr10_KN538367v1_fix
 ```
 于是，继续进行代码，就没有问题啦：
 ```
-zcat gencode.v33.annotation.gtf.gz | awk 'BEGIN{OFS="\t";} $3=="gene" {print $1,$4-1,$5}' | sortBed | complementBed -i stdin -g hg38-2.genome | gzip >gencode.v33.intergenic.annotation.gtf.gz
+zcat gencode.v33.annotation.gtf.gz | awk 'BEGIN{OFS="\t";} $3=="gene" {print $1,$4-1,$5}' | sortBed | complementBed -i stdin -g hg38-2.genome | gzip >gencode.v33.intergenic.annotation.bed.gz
 
-zcat gencode.v33.intergenic.annotation.gtf.gz | head -n5
+zcat gencode.v33.intergenic.annotation.bed.gz | head -n5
 chr1	0	11868
 chr1	31109	34553
 chr1	36081	52472
