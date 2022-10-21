@@ -202,4 +202,4 @@ WARNING. chromosome (chr10_KN538366v1_fix) was not found in the FASTA file. Skip
 ```
 
 ![image](https://user-images.githubusercontent.com/71922803/187893910-7c99ba00-0068-4888-a856-9f3e309707b2.png)
-基因碎片不碍事吧？
+网上找到其他教程说是基因碎片，影响应该不大
