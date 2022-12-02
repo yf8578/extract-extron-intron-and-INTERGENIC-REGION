@@ -11,7 +11,7 @@ DaveTang的这篇博客更新于2014年，那时转录组测序很火热。RNA-S
 ## 首先下载参考基因组注释
 ```
 #hg38版本
-wget -c ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_41/gencode.v41.annotation..gz
+wget -c ftp://ftp.ebi.ac.uk/pub/databases/gencode/Gencode_human/release_41/gencode.v41.annotation.gz
 
 zcat gencode.v41.annotation.gtf.gz | head -n6 
 ##description: evidence-based annotation of the human genome (GRCh38), version 41 (Ensembl 107)
